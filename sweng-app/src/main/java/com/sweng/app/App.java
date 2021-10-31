@@ -11,4 +11,7 @@ public class App
         System.out.println( "Hello World! Je suis Filippò Ich bin Fliedrich" );
     }
 
+    public static void qualcuno() {
+    	
+    }
 }
