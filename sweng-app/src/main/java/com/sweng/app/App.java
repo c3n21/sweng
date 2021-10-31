@@ -13,7 +13,7 @@ public class App
     }
     
     public static void qualcosa() {
-    	
+    	System.out.println("ho fatto le patate al forno con la cipolla");
     }
 
 }
