@@ -13,7 +13,7 @@ public class App
     }
     
     public static void qualcosa() {
-    	System.out.println("Ho fatto il cavolfiore al vapore");
+    	System.out.println("ho fatto le patate al forno con la cipolla");
     }
 
     public static void qualcuno() {
