@@ -1,6 +1,7 @@
 # Software Engineering Project
-## Xu zhou Zhou
-## Zhifan Chen
+## Authors
+- [Xu zhou Zhou](https://github.com/zepoli)
+- [Zhifan Chen](https://github.com/c3n21)
 
 # Development
 ## How to build
