@@ -8,7 +8,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World! Je suis Filippò Ich bin Fliedrich" );
+        System.out.println("Non succede niente?");
     }
 
 }

@@ -1,7 +1,7 @@
 package utils;
 
 public final class Indirizzo {
-	private final String nazione;
+    private final String nazione;
 	private final String provincia;
 	private final String comune;
 	private final String cap;

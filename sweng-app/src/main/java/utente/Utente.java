@@ -4,9 +4,9 @@ public abstract class Utente {
 	private final String nome;
 	private final String cognome;
 	
-	public Utente(String n, String s) {
-		nome = n;
-		cognome = s;
+	public Utente(String nome, String cognome) {
+		this.nome    = nome;
+		this.cognome = cognome;
 	}
 	
 	public String getNome() {
