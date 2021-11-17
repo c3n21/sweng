@@ -1,0 +1,224 @@
+Albania:Z100
+Andorra:Z101
+Austria:Z102
+Belgio:Z103
+Bulgaria:Z104
+Danimarca:Z107
+Finlandia:Z109
+Francia:Z110
+Germania:Z112
+Regno Unito:Z114
+Grecia:Z115
+Irlanda:Z116
+Islanda:Z117
+Liechtenstein:Z119
+Lussemburgo:Z120
+Malta:Z121
+Monaco:Z123
+Norvegia:Z125
+Paesi Bassi:Z126
+Polonia:Z127
+Portogallo:Z128
+Romania:Z129
+San Marino:Z130
+Spagna:Z131
+Svezia:Z132
+Svizzera:Z133
+Ucraina:Z138
+Ungheria:Z134
+Federazione russa:Z154
+Stato della Città del Vaticano:Z106
+Estonia:Z144
+Lettonia:Z145
+Lituania:Z146
+Croazia:Z149
+Slovenia:Z150
+Bosnia-Erzegovina:Z153
+Ex Repubblica Jugoslava di Macedonia:Z148
+Moldova:Z140
+Slovacchia:Z155
+Bielorussia:Z139
+Repubblica ceca:Z156
+Montenegro:Z159
+Serbia:Z158
+Kosovo:Z160
+Afghanistan:Z200
+Arabia Saudita:Z203
+Bahrein:Z204
+Bangladesh:Z249
+Bhutan:Z205
+Myanmar/Birmania:Z206
+Brunei Darussalam:Z207
+Cambogia:Z208
+Sri Lanka:Z209
+Cina:Z210
+Cipro:Z211
+Corea del Nord:Z214
+Corea del Sud:Z213
+Emirati Arabi Uniti:Z215
+Filippine:Z216
+Palestina:Z161
+Giappone:Z219
+Giordania:Z220
+India:Z222
+Indonesia:Z223
+Iran:Z224
+Iraq:Z225
+Israele:Z226
+Kuwait:Z227
+Laos:Z228
+Libano:Z229
+Timor Leste:Z242
+Maldive:Z232
+Malaysia:Z247
+Mongolia:Z233
+Nepal:Z234
+Oman:Z235
+Pakistan:Z236
+Qatar:Z237
+Singapore:Z248
+Siria:Z240
+Thailandia:Z241
+Turchia:Z243
+Vietnam:Z251
+Yemen:Z246
+Kazakhstan:Z255
+Uzbekistan:Z259
+Armenia:Z252
+Azerbaigian:Z253
+Georgia:Z254
+Kirghizistan:Z256
+Tagikistan:Z257
+Taiwan:Z217
+Turkmenistan:Z258
+Algeria:Z301
+Angola:Z302
+Costa d'Avorio:Z313
+Benin:Z314
+Botswana:Z358
+Burkina Faso:Z354
+Burundi:Z305
+Camerun:Z306
+Capo Verde:Z307
+Repubblica Centrafricana:Z308
+Ciad:Z309
+Comore:Z310
+Congo:Z311
+Egitto:Z336
+Etiopia:Z315
+Gabon:Z316
+Gambia:Z317
+Ghana:Z318
+Gibuti:Z361
+Guinea:Z319
+Guinea-Bissau:Z320
+Guinea equatoriale:Z321
+Kenya:Z322
+Lesotho:Z359
+Liberia:Z325
+Libia:Z326
+Madagascar:Z327
+Malawi:Z328
+Mali:Z329
+Marocco:Z330
+Mauritania:Z331
+Maurizio:Z332
+Mozambico:Z333
+Namibia:Z300
+Niger:Z334
+Nigeria:Z335
+Ruanda:Z338
+Sao Tomé e Principe:n.d.
+Seychelles:Z101
+Senegal:Z102
+Sierra Leone:Z103
+Somalia:Z104
+Sudafrica:Z105
+Sudan:Z108
+Eswatini:Z110
+Tanzania:Z111
+Togo:Z113
+Tunisia:Z115
+Uganda:Z116
+Repubblica Democratica del Congo:Z117
+Zambia:Z118
+Zimbabwe:Z120
+Eritrea:Z121
+Sud Sudan:Z122
+Antigua e Barbuda:Z124
+Bahamas:Z126
+Barbados:Z127
+Belize:Z128
+Canada:Z129
+Costa Rica:Z130
+Cuba:Z131
+Dominica:Z132
+Repubblica Dominicana:Z133
+El Salvador:Z134
+Giamaica:Z139
+Grenada:Z135
+Guatemala:Z155
+Haiti:Z107
+Honduras:Z145
+Messico:Z146
+Nicaragua:Z147
+Panama:Z150
+Santa Lucia:Z151
+Saint Vincent e Grenadine:Z154
+Saint Kitts e Nevis:Z149
+Stati Uniti d'America:Z141
+Argentina:Z156
+Bolivia:Z140
+Brasile:Z157
+Cile:Z160
+Colombia:Z159
+Ecuador:Z161
+Guyana:Z201
+Paraguay:Z204
+Perù:Z205
+Suriname:Z250
+Trinidad e Tobago:Z206
+Uruguay:Z207
+Venezuela:Z208
+Australia:Z209
+Figi:Z210
+Kiribati:Z211
+Isole Marshall:Z212
+Stati Federati di Micronesia:Z215
+Nauru:Z214
+Nuova Zelanda:Z216
+Palau:Z217
+Papua Nuova Guinea:Z162
+Isole Salomone:Z220
+Samoa:Z221
+Tonga:Z223
+Tuvalu:Z224
+Vanuatu:Z225
+Nuova Caledonia:Z226
+Saint-Martin (FR):Z227
+Sahara occidentale:Z228
+Saint-Barthélemy:Z229
+Bermuda:Z230
+Isole Cook (NZ):Z243
+Gibilterra:Z233
+Isole Cayman:Z248
+Anguilla:Z234
+Polinesia francese:Z235
+Isole Fær Øer:Z236
+Jersey:Z237
+Aruba:Z238
+Sint Maarten (NL):Z249
+Groenlandia:Z241
+Sark:Z242
+Guernsey:Z244
+Isole Falkland (Malvine):Z252
+Isola di Man:Z247
+Montserrat:Z256
+Curaçao:Z260
+Isole Pitcairn:Z253
+Saint Pierre e Miquelon:Z254
+Sant'Elena:Z255
+Terre australi e antartiche francesi:Z257
+Isole Turks e Caicos:Z258
+Isole Vergini britanniche:Z218
+Wallis e Futuna:Z259

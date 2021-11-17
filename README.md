@@ -18,3 +18,8 @@ mvn package
 cd sweng-app
 java -cp target/sweng-app-1.0-SNAPSHOT.jar com.sweng.app.App
 ```
+
+# Credits
+
+- Matteo Contrini ([comuni-json](https://github.com/matteocontrini/comuni-json)) per elenco `comuni.json`
+- arseniosiani ([cfjs](https://github.com/arseniosiani/cfjs)) per elenco `stati_esteri.json`
