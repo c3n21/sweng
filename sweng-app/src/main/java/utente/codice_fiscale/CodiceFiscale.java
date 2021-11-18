@@ -24,6 +24,11 @@ public final class CodiceFiscale {
     };
 
     /**
+     * Crea un codice fiscale a partire da uno fornito.
+     * Non viene controllata la conformità per quanto riguarda il codice catastale
+     * dei comuni italiani o degli stati esteri, ma solo se il formato è valido
+     * (quindi lettere e numeri al posto giusto).
+     *
      * @param cf codice fiscale correttamente formattato
      *
      */
@@ -40,7 +45,11 @@ public final class CodiceFiscale {
         }
 
         this.codice = cf.toCharArray();
-        if (!CodiceFiscale.controlla(this)) {
+
+        Pattern pattern = Pattern.compile("[A-Z]{6}[0-9]{2}[A-Z]{1}[0-9]{2}[A-Z]{1}[0-9]{3}[A-Z]{1}");
+        Matcher matcher = pattern.matcher(new String(codice));
+
+        if (!matcher.find()) {
             throw new 
                 IllegalArgumentException(
                         String.format("Formato CF '%s' non valido", cf)
@@ -49,23 +58,33 @@ public final class CodiceFiscale {
     }
 
     /**
-     * Verifica se il c e' o no una vocale
+     * Verifica se il carattere è o no una vocale
      * 
      * @return true se e' una vocale, false altrimenti
      */
     private static boolean isVocale(char c) {
+        c = Character.toUpperCase(c);
+
         return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
     }
 
     /**
+     * Restituisce la stringa iniziale con tante X quante ne servono per arrivare
+     * a comporre una stringa lunga 3.
+     * Se la stringa ha già la dimensione necessaria, la stringa restituita rimane
+     * invariata.
+     *
      * @param string
+     *
      * @return string se la stringa iniziale ha lunghezza maggiore di 3, altrimenti
-     * appende tante X quante ne servono per arrivare a 3
+     * la stringa iniziale.
      */
     private static String riempi(String string) {
         String res = string;
         if (string.length() < 3) {
-            res = string + "X".repeat(3 - string.length());
+        	for (int i = 0; i < 3 - string.length(); i++) {
+        		res += "X";
+        	}	
         }
 
         return res;
@@ -251,7 +270,7 @@ public final class CodiceFiscale {
             if(!Character.isAlphabetic(c)) {
                 throw new IllegalArgumentException(
                     String.format(
-                        "c = %c non é una lettera dell'alfabeto o un numero",
+                        "c = %c non Ã© una lettera dell'alfabeto o un numero",
                         c)
                 );
             } else {
@@ -280,7 +299,7 @@ public final class CodiceFiscale {
             if(!Character.isAlphabetic(c)) {
                 throw new IllegalArgumentException(
                     String.format(
-                        "c = %c non é una lettera dell'alfabeto o un numero",
+                        "c = %c non e una lettera dell'alfabeto o un numero",
                         c)
                 );
             } else {
@@ -291,9 +310,32 @@ public final class CodiceFiscale {
         return res;
     }
 
-    public /*@ pure @*/ static boolean controlla(CodiceFiscale cf) {
-        Pattern pattern = Pattern.compile("[A-Z]{6}[0-9]{2}[A-Z]{1}[0-9]{2}[A-Z]{1}[0-9]{3}[A-Z]{1}");
-        Matcher matcher = pattern.matcher(cf.codice.toString());
-        return matcher.find();
+    /**
+     * Controlla che il codice fiscale dato sia corretto
+     *
+     * @param cf codice fiscale da controllare
+     * @param nome,
+     * @param cognome,
+     * @param data_nascita,
+     * @param nazione_nascita,
+     * @param comune_nascita,
+     * @param sesso
+     *
+     * @return true se è corretto, false altrimenti
+     */
+    public /*@ pure @*/ static boolean controlla(
+        CodiceFiscale cf,
+        String nome,
+        String cognome,
+        Date data_nascita,
+        String nazione_nascita,
+        String comune_nascita,
+        Sesso sesso
+    ) {
+        String expected = new String(CodiceFiscale.calcola(
+            nome, cognome, data_nascita, nazione_nascita, comune_nascita, sesso
+        ));
+
+        return new String(cf.codice).equals(expected);
     }
 }

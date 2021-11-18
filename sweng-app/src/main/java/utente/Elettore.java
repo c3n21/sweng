@@ -13,13 +13,12 @@ public class Elettore extends Utente {
     private final String nazione;
     private final Sesso sesso;
     private final String codice_fiscale;
-    private boolean voto;
+    private /*@ spec_public @*/boolean voto;
 	
-    //@ requires nome != null && cognome != null
-    //@ requires sesso == Sesso.MASCHIO || sesso == Sesso.FEMMINA
-    //@ requires ((new Date().getYear()) - data_nascita.getYear()) >= 18
-    //@ requires (new Date()).compareTo(data_nascita) > 0
-    //@ requires (nazione.equals("Italia") && !comune.equals("")) || (!nazione.equals(""))
+    //@ requires nome != null && cognome != null;
+    //@ requires sesso == Sesso.MASCHIO || sesso == Sesso.FEMMINA;
+    //@ requires (new Date()).compareTo(data_nascita) > 0;
+    //@ requires (nazione.toUpperCase().equals("ITALIA") && !comune.equals("")) || (!nazione.equals(""));
     public Elettore(
             String nome,
             String cognome,
@@ -51,7 +50,7 @@ public class Elettore extends Utente {
      * Esprime il voto dell'elettore se non l'ha ancora fatto.
      * TODO: eccezione se il voto e' gia' stato espresso?
      */
-    //@ requires voto == false
+    //@ requires voto == false;
     public /*@ pure @*/ void esprimi_voto() {
         if (!voto) {
             this.voto = true;
