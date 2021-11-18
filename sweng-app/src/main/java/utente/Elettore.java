@@ -1,6 +1,5 @@
 package utente;
 
-import java.io.FileNotFoundException;
 import java.util.Date;
 
 import utente.codice_fiscale.CodiceFiscale;
@@ -13,26 +12,27 @@ public class Elettore extends Utente {
     private final String nazione;
     private final Sesso sesso;
     private final String codice_fiscale;
-    private /*@ spec_public @*/boolean voto;
+    private /*@ spec_public @*/ boolean voto;
 	
-    //@ requires nome != null && cognome != null;
+    //@ requires nome != null && cognome != null && !nome.equals("") && !cognome.equals("");
     //@ requires sesso == Sesso.MASCHIO || sesso == Sesso.FEMMINA;
     //@ requires (new Date()).compareTo(data_nascita) > 0;
-    //@ requires (nazione.toUpperCase().equals("ITALIA") && !comune.equals("")) || (!nazione.equals(""));
+    //@ requires (nazione_nascita.toUpperCase().equals("ITALIA") && !comune_nascita.equals("")) || (!nazione_nascita.equals(""));
+    //@ requires CodiceFiscale.controlla(codice_fiscale, nome, cognome, data_nascita, nazione_nascita, comune_nascita, sesso) == true;
     public Elettore(
             String nome,
             String cognome,
             Date data_nascita,
-            String comune,
-            String nazione,
+            String comune_nascita,
+            String nazione_nascita,
             Sesso sesso,
             String codice_fiscale
             ) {
         super(nome, cognome);
         this.codice_fiscale = codice_fiscale;
-        this.comune         = comune;
+        this.comune         = comune_nascita;
         this.data_nascita   = data_nascita;
-        this.nazione        = nazione;
+        this.nazione        = nazione_nascita;
         this.sesso          = sesso;
         this.voto           = false;
     }
@@ -46,64 +46,99 @@ public class Elettore extends Utente {
         return (new Date()).getTime() - data_nascita.getTime() >= 18.0 * 365.0 * 24.0 * 60.0 * 60.0 * 1000.0;
     }
 
+    //@ requires voto == false;
     /**
      * Esprime il voto dell'elettore se non l'ha ancora fatto.
      * TODO: eccezione se il voto e' gia' stato espresso?
      */
-    //@ requires voto == false;
     public /*@ pure @*/ void esprimi_voto() {
         if (!voto) {
             this.voto = true;
         }
     }
 
-    public static void main (String[] args) throws FileNotFoundException {
-        Date now = new Date();
+    public static void main (String[] args) {
 
-        Date ok = new Date(2000, 0, 1);
+        Elettore.TestNomeCognome();
+        Elettore.TestSesso();
+        Elettore.TestMaggiorenne();
+        Elettore.TestLuogoNascita();
+        Elettore.TestCodiceFiscale();
+        Elettore.TestEsprimiVoto();
 
+    }
+    
+    public static void TestNomeCognome() {
+        System.out.println("Test: nome e cognome sono null");
+        new Elettore(null, null, null, null, null, null, null);
+    }
+    
+    public static void TestSesso() {
         String nome1 = "Pietro";
         String cognome1 = "Tornaindietro";
         Date data_nascita1 = new Date(2000, 0, 1);
         String cf1 = "TRNPTR00A01H199G";
         String comune1 = "Ravenna";
         String nazione1 = "Italia";
-
+    	
+        System.out.println("Test: sesso null");
+        new Elettore(nome1, cognome1, data_nascita1, "Ravenna", "Italia", null, cf1);
+    }
+    
+    public static void TestMaggiorenne() {
         String nome2 = "Mimmo";
         String cognome2 = "Mammo";
         Date data_nascita2 = new Date(2010, 0, 1);
         String cf2 = "MMMMMM10A01H199Y";
+        
+        System.out.println("Test: maggiorenne");
+        Elettore mimmo = new Elettore(nome2, cognome2, data_nascita2, "Ravenna", "Italia", null, cf2);
 
+        System.out.println("Test: elettore isMaggiorenne?");
+        System.out.println("\tisMaggiorenne? expected false, got " + mimmo.isMaggiorenne());
+    }
+    
+    public static void TestLuogoNascita() {
+    	
+        String nome1 = "Pietro";
+        String cognome1 = "Tornaindietro";
+        Date data_nascita1 = new Date(2000, 0, 1);
+        String cf1 = "TRNPTR00A01H199G";
+        String comune1 = "Ravenna";
+        String nazione1 = "Italia";
+    	
+        System.out.println("Test: comune = null anche se italiano");
+        new Elettore(nome1, cognome1, data_nascita1, null, "Italia", null, cf1);
+    }
+    
+    public static void TestEsprimiVoto() {
+        String nome1 = "Pietro";
+        String cognome1 = "Tornaindietro";
+        Date data_nascita1 = new Date(2000, 0, 1);
+        String cf1 = "TRNPTR00A01H199G";
+        String comune1 = "Ravenna";
+        String nazione1 = "Italia";
+        
+        Elettore ok = new Elettore(nome1, cognome1, data_nascita1, "Ravenna", "Italia", Sesso.MASCHIO, cf1);
+    	
+        System.out.println("Test: elettore idoneo puo' votare solo una volta");
+    	ok.esprimi_voto();
+    	ok.esprimi_voto();
+    }
+    
+    public static void TestCodiceFiscale() {
+        String nome1 = "Pietro";
+        String cognome1 = "Tornaindietro";
+        Date data_nascita1 = new Date(2000, 0, 1);
+        String cf1 = "TRNPTR00A01H199G";
+        String comune1 = "Ravenna";
+        String nazione1 = "Italia";
+    	
         String nome3 = "Immigrato";
         String cognome3 = "Clandestino";
         Date data_nascita3 = new Date(2000, 0, 1);
         String cf3 = "CLNMGR00A01Z210K"; //luogo di nascita Cina
-
-        System.out.println("Test: nome e cognome sono null");
-        new Elettore(null, null, null, null, null, null, null);
-
-        System.out.println("Test: sesso null");
-        new Elettore(nome1, cognome1, data_nascita1, "Ravenna", "Italia", null, cf1);
-
-        System.out.println("Test: maggiorenne");
-        Elettore mimmo = new Elettore(nome2, cognome2, data_nascita2, "Ravenna", "Italia", null, cf2);
-
-
-        System.out.println("Test: comune = null anche se italiano");
-        new Elettore(nome1, cognome1, data_nascita1, null, "Italia", null, cf2);
-
-        System.out.println("Test: elettore italiano idoneo");
-        Elettore elettore = new Elettore(nome1, cognome1, data_nascita1, "Ravenna", "Italia", Sesso.MASCHIO, cf1);
-
-        System.out.println("Test: elettore straniero idoneo");
-        new Elettore(nome3, cognome3, data_nascita3, null, "Cina", Sesso.MASCHIO, cf3);
-
-        System.out.println("Test: elettore idoneo puo' votare solo una volta");
-        elettore.esprimi_voto();
-
-        System.out.println("Test: elettore isMaggiorenne?");
-        System.out.println("\tisMaggiorenne? expected false, got " + mimmo.isMaggiorenne());
-
+        
         System.out.println("Test: CF elettore italiano idoneo");
         String generated_cf1 = CodiceFiscale.calcola(
             nome1,
@@ -136,6 +171,7 @@ public class Elettore extends Utente {
             cf3.equals(generated_cf3)
         );
 
+        Date ok = new Date(2000, 0, 1);
         System.out.println("Test: CF elettore italiano idoneo con nome e cognome < 3");
         String generated_cf4 = CodiceFiscale.calcola(
             "ll",
@@ -151,5 +187,25 @@ public class Elettore extends Utente {
             ) +
             "LLXLLX00A01H199N".equals(generated_cf4)
         );
+    }
+    
+    public static void TestElettore() {
+        String nome1 = "Pietro";
+        String cognome1 = "Tornaindietro";
+        Date data_nascita1 = new Date(2000, 0, 1);
+        String cf1 = "TRNPTR00A01H199G";
+        String comune1 = "Ravenna";
+        String nazione1 = "Italia";
+    	
+        String nome3 = "Immigrato";
+        String cognome3 = "Clandestino";
+        Date data_nascita3 = new Date(2000, 0, 1);
+        String cf3 = "CLNMGR00A01Z210K"; //luogo di nascita Cina
+        
+        System.out.println("Test: elettore italiano idoneo");
+        Elettore elettore_ita_ido = new Elettore(nome1, cognome1, data_nascita1, "Ravenna", "Italia", Sesso.MASCHIO, cf1);
+
+        System.out.println("Test: elettore straniero idoneo");
+        Elettore elettore_stra_ido = new Elettore(nome3, cognome3, data_nascita3, null, "Cina", Sesso.MASCHIO, cf3);
     }
 }

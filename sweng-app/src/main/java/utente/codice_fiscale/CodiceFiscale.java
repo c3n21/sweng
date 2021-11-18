@@ -338,4 +338,33 @@ public final class CodiceFiscale {
 
         return new String(cf.codice).equals(expected);
     }
+    
+    /**
+     * Controlla che il codice fiscale dato sia corretto
+     *
+     * @param cf codice fiscale da controllare
+     * @param nome,
+     * @param cognome,
+     * @param data_nascita,
+     * @param nazione_nascita,
+     * @param comune_nascita,
+     * @param sesso
+     *
+     * @return true se è corretto, false altrimenti
+     */
+    public /*@ pure @*/ static boolean controlla(
+        String cf,
+        String nome,
+        String cognome,
+        Date data_nascita,
+        String nazione_nascita,
+        String comune_nascita,
+        Sesso sesso
+    ) {
+        String expected = new String(CodiceFiscale.calcola(
+            nome, cognome, data_nascita, nazione_nascita, comune_nascita, sesso
+        ));
+
+        return cf.equals(expected);
+    }
 }
