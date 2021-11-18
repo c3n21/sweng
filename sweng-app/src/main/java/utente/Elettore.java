@@ -40,18 +40,15 @@ public class Elettore extends Utente {
 
     /**
      * Verifica se this e' maggiorenne o no.
+     *
      * @return true se this e' maggiorenne, false altrimenti
      */
     public /*@ pure @*/ boolean isMaggiorenne() {
-        Date now  = new Date();
-        int diff = now.getYear() - data_nascita.getYear();
-
-        return diff >= 18;
+        return (new Date()).getTime() - data_nascita.getTime() >= 18.0 * 365.0 * 24.0 * 60.0 * 60.0 * 1000.0;
     }
 
-
     /**
-     * Esprime il voto di this se non l'ha ancora fatto.
+     * Esprime il voto dell'elettore se non l'ha ancora fatto.
      * TODO: eccezione se il voto e' gia' stato espresso?
      */
     //@ requires voto == false
@@ -70,6 +67,8 @@ public class Elettore extends Utente {
         String cognome1 = "Tornaindietro";
         Date data_nascita1 = new Date(2000, 0, 1);
         String cf1 = "TRNPTR00A01H199G";
+        String comune1 = "Ravenna";
+        String nazione1 = "Italia";
 
         String nome2 = "Mimmo";
         String cognome2 = "Mammo";
@@ -88,7 +87,7 @@ public class Elettore extends Utente {
         new Elettore(nome1, cognome1, data_nascita1, "Ravenna", "Italia", null, cf1);
 
         System.out.println("Test: maggiorenne");
-        new Elettore(nome1, cognome1, data_nascita1, "Ravenna", "Italia", null, cf2);
+        Elettore mimmo = new Elettore(nome2, cognome2, data_nascita2, "Ravenna", "Italia", null, cf2);
 
 
         System.out.println("Test: comune = null anche se italiano");
@@ -102,6 +101,9 @@ public class Elettore extends Utente {
 
         System.out.println("Test: elettore idoneo puo' votare solo una volta");
         elettore.esprimi_voto();
+
+        System.out.println("Test: elettore isMaggiorenne?");
+        System.out.println("\tisMaggiorenne? expected false, got " + mimmo.isMaggiorenne());
 
         System.out.println("Test: CF elettore italiano idoneo");
         String generated_cf1 = CodiceFiscale.calcola(
