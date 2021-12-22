@@ -1,6 +1,6 @@
 package utils;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.FileNotFoundException;
 
@@ -20,7 +20,7 @@ public class TestConfigurationManager {
     public void testGetDatabasePort() throws FileNotFoundException
     {
         ConfigurationManager configurationManager = ConfigurationManager.getInstance("test.properties");
-        assertTrue(configurationManager.getDatabasePort() == 12345);
+        assertEquals(8199, configurationManager.getDatabasePort());
     }
 
     /**
@@ -31,7 +31,7 @@ public class TestConfigurationManager {
     public void testGetDatabaseTimeout() throws FileNotFoundException
     {
         ConfigurationManager configurationManager = ConfigurationManager.getInstance("test.properties");
-        assertTrue(configurationManager.getDatabaseTimeout() == 60000);
+        assertEquals(60000, configurationManager.getDatabaseTimeout());
     }
     
     /**
@@ -42,7 +42,7 @@ public class TestConfigurationManager {
     public void testGetDatabaseHost() throws FileNotFoundException
     {
         ConfigurationManager configurationManager = ConfigurationManager.getInstance("test.properties");
-        assertTrue(configurationManager.getDatabaseHost().equals("test.host"));
+        assertEquals("jdbc:mariadb://localhost:3306/utenti",configurationManager.getDatabaseHost());
     }
 
     /**
@@ -53,7 +53,7 @@ public class TestConfigurationManager {
     public void testGetDatabaseUser() throws FileNotFoundException
     {
         ConfigurationManager configurationManager = ConfigurationManager.getInstance("test.properties");
-        assertTrue(configurationManager.getDatabaseUser().equals("test-admin"));
+        assertEquals("sweng",configurationManager.getDatabaseUser());
     }
 
     /**
@@ -64,6 +64,6 @@ public class TestConfigurationManager {
     public void testGetDatabasePassword() throws FileNotFoundException
     {
         ConfigurationManager configurationManager = ConfigurationManager.getInstance("test.properties");
-        assertTrue(configurationManager.getDatabasePassword().equals("test-password"));
+        assertEquals("sweng",configurationManager.getDatabasePassword());
     }
 }
