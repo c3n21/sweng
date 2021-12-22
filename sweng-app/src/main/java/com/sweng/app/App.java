@@ -20,15 +20,6 @@ public class App
             e.printStackTrace();
         }
         
-        try {
-            Connection connection = DriverManager.getConnection(configurationManager.getDatabaseHost(),
-                    configurationManager.getDatabaseUser(),
-                    configurationManager.getDatabasePassword()
-                );
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
 
         System.out.println("Non succede niente?");
     }
