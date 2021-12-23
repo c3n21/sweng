@@ -6,11 +6,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Statement;
+import java.util.Optional;
 
-import dao.exceptions.DaoGenericException;
-import dao.exceptions.DaoUnexpectedException;
+import dao.exceptions.DaoUnrecoverableException;
 import utente.Impiegato;
 import utils.ConfigurationManager;
 
@@ -26,7 +25,7 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
     private static PreparedStatement UPDATE  = null;
     private static PreparedStatement DELETE = null;
 
-    public ImpiegatoDao() throws DaoUnexpectedException {
+    public ImpiegatoDao() {
         ConfigurationManager configurationManager = null;
 
         try {
@@ -47,7 +46,7 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
 
             if (ImpiegatoDao.GET == null) {
                 ImpiegatoDao.GET = connection.prepareStatement(
-                    "SELECT * FROM impiegati WHERE nome=? AND cognome=? AND password=?"
+                    "SELECT * FROM impiegati WHERE id=? AND password=?"
                 );
             }
 
@@ -59,7 +58,8 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
 
             if (ImpiegatoDao.INSERT == null) {
                 ImpiegatoDao.INSERT = connection.prepareStatement(
-                    "INSERT INTO impiegati(nome, cognome, password) VALUES(?, ?, ?);"
+                    "INSERT INTO impiegati(nome, cognome, password) VALUES(?, ?, ?);",
+                    Statement.RETURN_GENERATED_KEYS
                 );
             }
 
@@ -76,63 +76,74 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
             }
 
         } catch (SQLException e) {
-            throw new DaoUnexpectedException(e.getMessage(), e.getCause());
+            throw new DaoUnrecoverableException(e.getMessage(), e.getCause());
         }
     }
 
     @Override
-    public List<Impiegato> get(String[] params) throws DaoGenericException {
-        List<Impiegato> result = new ArrayList<>();
+    public Optional<Impiegato> get(Object[] params) {
+        Optional<Impiegato> result = Optional.empty();
         try {
-            ImpiegatoDao.GET.setString(1, params[0]);
-            ImpiegatoDao.GET.setString(2, params[1]);
-            ImpiegatoDao.GET.setString(3, params[2]);
+            for (int i = 0; i < 2; i++) {
+                
+                if(params[i] instanceof Integer) {
+
+                    int arg = (int) params[i];
+                    ImpiegatoDao.GET.setInt(i+1, arg);
+                } else if(params[i] instanceof String) {
+                    ImpiegatoDao.GET.setString(i+1, (String) params[i]);
+                }
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoUnrecoverableException(e.getMessage(), e.getCause());
         }
 
         try (ResultSet rs = ImpiegatoDao.GET.executeQuery()) {
-            while(rs.next()) {
-
+            if (!rs.isBeforeFirst() && rs.next()) {
                 int id          = rs.getInt("id");
                 String nome     = rs.getString("nome");
                 String cognome  = rs.getString("cognome");
                 String password = rs.getString("password");
-
-                result.add(new Impiegato(id, nome, cognome, password));
+                result = Optional.of(new Impiegato(id, nome, cognome, password));
             }
-
         } catch(SQLException e) {
-            throw new DaoGenericException("SQLException", e.getCause());
+            throw new DaoUnrecoverableException(e.getMessage(), e.getCause());
         }
 
         return result;
     }
 
     @Override
-    public void save(Impiegato impiegato) throws DaoGenericException {
+    public Optional<Impiegato> save(Impiegato impiegato) {
+        Optional<Impiegato> result = Optional.empty();
         try {
             ImpiegatoDao.INSERT.setString(1, impiegato.getNome());
             ImpiegatoDao.INSERT.setString(2, impiegato.getCognome());
             ImpiegatoDao.INSERT.setString(3, impiegato.getPassword());
 
             if(ImpiegatoDao.INSERT.execute()) {
-                throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
+                throw new DaoUnrecoverableException("Il risultato non dovrebbe essere true (ResultSet).");
+            }
+
+            try (ResultSet rs = ImpiegatoDao.INSERT.getGeneratedKeys()) {
+                rs.next();
+                result = Optional.of(impiegato.setId(rs.getInt(1)));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        return result;
     }
 
     @Override
-    public void update(Impiegato t, String[] params) throws DaoGenericException {
+    public void update(Impiegato t, String[] params) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void delete(Impiegato t) throws DaoUnexpectedException {
+    public void delete(Impiegato t) {
         try {
 
             // "DELETE FROM utenti WHERE id=? AND nome=? AND cognome=? AND password=?"
@@ -142,14 +153,11 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
             ImpiegatoDao.DELETE.setString(4, t.getPassword());
 
             if(ImpiegatoDao.DELETE.execute()) {
-                throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
+                throw new DaoUnrecoverableException("Il risultato non dovrebbe essere true (ResultSet).");
             }
 
-            System.out.println(
-                String.format("Risultato: %d", ImpiegatoDao.DELETE.getUpdateCount())
-            );
         } catch (SQLException e) {
-            throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
+            throw new DaoUnrecoverableException("Il risultato non dovrebbe essere true (ResultSet).");
         }
     }
 

@@ -45,4 +45,9 @@ public abstract class AbstractUtente {
     public void visualizza(Sessione sessione) {
 	this.current_sessione = sessione;
     }
+
+    @Override
+    public String toString() {
+	return String.format("Impiegato[id: %d, nome: %s, cognome: %s]", this.getId(), this.getNome(), this.getCognome());
+    }
 }

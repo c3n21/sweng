@@ -17,5 +17,3 @@ CREATE TABLE IF NOT EXISTS impiegati(
     cognome VARCHAR(30) NOT NULL,
     password VARCHAR(128) NOT NULL
 );
-
-INSERT INTO utenti(nome, cognome, password, tipo) VALUES('Ceo', 'Stronzo', 'prova', 'utente');

@@ -6,12 +6,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
-import dao.exceptions.DaoGenericException;
-import dao.exceptions.DaoUnexpectedException;
+import dao.exceptions.DaoUnrecoverableException;
 import utente.Utente;
 import utils.ConfigurationManager;
 import utente.Sesso;
@@ -49,7 +48,7 @@ public class UtenteDao implements InterfaceDao<Utente>{
 
             if (UtenteDao.GET == null) {
                 UtenteDao.GET = connection.prepareStatement(
-                    "SELECT * FROM utenti WHERE nome=? AND cognome=? AND password=?"
+                    "SELECT * FROM utenti WHERE id=? AND password=?"
                 );
             }
 
@@ -61,7 +60,8 @@ public class UtenteDao implements InterfaceDao<Utente>{
 
             if (UtenteDao.INSERT == null) {
                 UtenteDao.INSERT = connection.prepareStatement(
-                    "INSERT INTO utenti(nome, cognome, data_nascita, sesso, comune, nazione, codice_fiscale, password) VALUES(?, ?, ?, ?, ?, ?, ?, ?);"
+                    "INSERT INTO utenti(nome, cognome, data_nascita, sesso, comune, nazione, codice_fiscale, password) VALUES(?, ?, ?, ?, ?, ?, ?, ?);",
+                    Statement.RETURN_GENERATED_KEYS
                 );
             }
 
@@ -84,27 +84,35 @@ public class UtenteDao implements InterfaceDao<Utente>{
     }
 
     @Override
-    public List<Utente> get(String[] params) throws DaoGenericException {
-        List<Utente> result = new ArrayList<>();
+    public Optional<Utente> get(Object[] params) {
+        Optional<Utente> result = Optional.empty();
         try {
-            UtenteDao.GET.setString(1, params[0]);
-            UtenteDao.GET.setString(2, params[1]);
-            UtenteDao.GET.setString(3, params[2]);
+
+            for (int i = 0; i < 2; i++) {
+                
+                if(params[i] instanceof Integer) {
+
+                    int arg = (int) params[i];
+                    UtenteDao.GET.setInt(i+1, arg);
+                } else if(params[i] instanceof String) {
+                    UtenteDao.GET.setString(i+1, (String) params[i]);
+                }
+            }
         } catch (SQLException e) {
-            throw new DaoUnexpectedException(e.getMessage(), e.getCause());
+            throw new DaoUnrecoverableException(e.getMessage(), e.getCause());
         }
 
         try (ResultSet rs = UtenteDao.GET.executeQuery()) {
-            while(rs.next()) {
-
+            if (!rs.isBeforeFirst() && rs.next()) {
+                
                 int id          = rs.getInt("id");
                 String nome     = rs.getString("nome");
                 String cognome  = rs.getString("cognome");
                 String password = rs.getString("password");
 
                 Sesso sesso = rs.getString("sesso").equals("M")? Sesso.MASCHIO : Sesso.FEMMINA;
-                
-                result.add(
+
+                result = Optional.of(
                     new Utente(
                         id, nome, cognome, sesso,
                         LocalDate.parse(rs.getString("data_nascita")),
@@ -117,14 +125,15 @@ public class UtenteDao implements InterfaceDao<Utente>{
             }
 
         } catch(SQLException e) {
-            throw new DaoUnexpectedException(e.getMessage(), e.getCause());
+            throw new DaoUnrecoverableException(e.getMessage(), e.getCause());
         }
 
         return result;
     }
 
     @Override
-    public void save(Utente utente) throws DaoGenericException {
+    public Optional<Utente> save(Utente utente) {
+        Optional<Utente> result = Optional.empty();
 
                     // "INSERT INTO utenti(nome, cognome, data_nascita, sesso, comune, nazione, codice_fiscale, password) VALUES(?, ?, ?, ?, ?, ?, ?);"
         try {
@@ -138,11 +147,19 @@ public class UtenteDao implements InterfaceDao<Utente>{
             UtenteDao.INSERT.setString(8, utente.getPassword());
             
             if(UtenteDao.INSERT.execute()) {
-                throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
+                throw new DaoUnrecoverableException("Il risultato non dovrebbe essere true (ResultSet).");
+            } 
+
+            try (ResultSet rs = UtenteDao.INSERT.getGeneratedKeys()) {
+                rs.next();
+                result = Optional.of(utente.setId(rs.getInt(1)));
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DaoUnrecoverableException(e.getMessage(), e.getCause());
         }
+        
+        return result;
     }
 
     @Override
@@ -151,7 +168,7 @@ public class UtenteDao implements InterfaceDao<Utente>{
     }
 
     @Override
-    public void delete(Utente t) throws DaoGenericException {
+    public void delete(Utente t) {
         try {
 
                     // "DELETE FROM utenti WHERE id=? AND nome=? AND cognome=? AND password=?"
@@ -161,10 +178,10 @@ public class UtenteDao implements InterfaceDao<Utente>{
             UtenteDao.DELETE.setString(4, t.getPassword());
 
             if(UtenteDao.DELETE.execute()) {
-                throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
+                throw new DaoUnrecoverableException("Il risultato non dovrebbe essere true (ResultSet).");
             }
         } catch (SQLException e) {
-            throw new DaoUnexpectedException(e.getMessage(), e.getCause());
+            throw new DaoUnrecoverableException(e.getMessage(), e.getCause());
         }
     }
 

@@ -1,14 +1,12 @@
 package dao;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
 import utente.Impiegato;
-import dao.exceptions.DaoGenericException;
-import dao.exceptions.DaoUnexpectedException;
 
 /**
  * Unit test for {@link ImpiegatoDao}
@@ -16,22 +14,19 @@ import dao.exceptions.DaoUnexpectedException;
 public class TestImpiegatoDao {
 
     @Test
-    public void testSaveAndGet() throws DaoGenericException, DaoUnexpectedException
+    public void testSaveAndGet()
     {
         Impiegato test = new Impiegato(-1234, "Test", "Impiegato", "password");
         final ImpiegatoDao dao = new ImpiegatoDao();
-        String[] params = {"Test", "Impiegato", "password"};
-        dao.save(test);
 
-        List<Impiegato> impiegati = dao.get(params);
-        assertEquals(1, impiegati.size(), "Più di un impiegato");
-        impiegati.forEach(arg0 -> {
-            try {
-                dao.delete(arg0);
-            } catch (DaoUnexpectedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        });
+        Optional<Impiegato> impiegato = dao.save(test);
+        System.out.println(impiegato.get());
+        Object[] params = {impiegato.get().getId(), "password"};
+
+        impiegato = dao.get(params);
+        System.out.println(impiegato.get());
+
+        assertTrue(impiegato.isPresent());
+        dao.delete(impiegato.get());
     }
 }

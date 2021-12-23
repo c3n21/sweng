@@ -69,6 +69,10 @@ public class Utente extends AbstractUtente {
         return codice_fiscale;
     }
 
+    public Utente setId(int id) {
+        return new Utente(id, this.getNome(), this.getCognome(), sesso, data_nascita, comune, nazione, codice_fiscale, this.getPassword());
+    }
+
     /**
      * Esprime il voto dell'utente se non l'ha ancora fatto.
      * TODO: eccezione se il voto e' gia' stato espresso?

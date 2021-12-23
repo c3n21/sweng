@@ -1,4 +1,8 @@
 build:
-	mvn package
+	mvn -e -X package
+
+runfx:
+	mvn -e -X clean javafx:run
+
 test:
-	mvn test
+	mvn -e -X test
