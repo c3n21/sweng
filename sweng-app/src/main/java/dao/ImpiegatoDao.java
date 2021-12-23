@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.exceptions.DaoGenericException;
+import dao.exceptions.DaoUnexpectedException;
 import utente.Impiegato;
 import utils.ConfigurationManager;
 
@@ -22,6 +24,7 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
     private static PreparedStatement GET_ALL = null;
     private static PreparedStatement INSERT  = null;
     private static PreparedStatement UPDATE  = null;
+    private static PreparedStatement DELETE = null;
 
     public ImpiegatoDao() {
         ConfigurationManager configurationManager = null;
@@ -63,6 +66,12 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
             if (ImpiegatoDao.UPDATE == null) {
                 ImpiegatoDao.UPDATE = connection.prepareStatement(
                     "SELECT * FROM impiegati WHERE nome=? cognome=?"
+                );
+            }
+
+            if (ImpiegatoDao.DELETE == null) {
+                ImpiegatoDao.DELETE = connection.prepareStatement(
+                    "DELETE FROM impiegati WHERE id=? AND nome=? AND cognome=? AND password=?"
                 );
             }
 
@@ -128,6 +137,20 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
     public void delete(Impiegato t) throws DaoGenericException {
         // TODO Auto-generated method stub
         
+        try {
+
+            // "DELETE FROM utenti WHERE id=? AND nome=? AND cognome=? AND password=?"
+            ImpiegatoDao.DELETE.setInt(1, t.getId());
+            ImpiegatoDao.DELETE.setString(2, t.getNome());
+            ImpiegatoDao.DELETE.setString(3, t.getCognome());
+            ImpiegatoDao.DELETE.setString(4, t.getPassword());
+
+            if(ImpiegatoDao.DELETE.execute()) {
+                throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
+            }
+        } catch (SQLException e) {
+            throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
+        }
     }
 
     

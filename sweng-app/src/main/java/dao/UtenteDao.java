@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import dao.exceptions.DaoGenericException;
+import dao.exceptions.DaoUnexpectedException;
 import utente.Utente;
 import utils.ConfigurationManager;
 import utente.Sesso;
@@ -24,6 +26,7 @@ public class UtenteDao implements InterfaceDao<Utente>{
     private static PreparedStatement GET_ALL = null;
     private static PreparedStatement INSERT  = null;
     private static PreparedStatement UPDATE  = null;
+    private static PreparedStatement DELETE  = null;
 
     public UtenteDao() {
         ConfigurationManager configurationManager = null;
@@ -68,6 +71,11 @@ public class UtenteDao implements InterfaceDao<Utente>{
                 );
             }
 
+            if (UtenteDao.DELETE == null) {
+                UtenteDao.DELETE = connection.prepareStatement(
+                    "DELETE FROM utenti WHERE id=? AND nome=? AND cognome=? AND password=?"
+                );
+            }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -109,7 +117,7 @@ public class UtenteDao implements InterfaceDao<Utente>{
             }
 
         } catch(SQLException e) {
-            throw new DaoGenericException(e.getMessage(), e.getCause());
+            throw new DaoUnexpectedException(e.getMessage(), e.getCause());
         }
 
         return result;
@@ -143,8 +151,21 @@ public class UtenteDao implements InterfaceDao<Utente>{
     }
 
     @Override
-    public void delete(Utente t) {
+    public void delete(Utente t) throws DaoGenericException {
+        try {
 
+                    // "DELETE FROM utenti WHERE id=? AND nome=? AND cognome=? AND password=?"
+            UtenteDao.DELETE.setInt(1, t.getId());
+            UtenteDao.DELETE.setString(2, t.getNome());
+            UtenteDao.DELETE.setString(3, t.getCognome());
+            UtenteDao.DELETE.setString(4, t.getPassword());
+
+            if(UtenteDao.DELETE.execute()) {
+                throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
+            }
+        } catch (SQLException e) {
+            throw new DaoUnexpectedException(e.getMessage(), e.getCause());
+        }
     }
 
     

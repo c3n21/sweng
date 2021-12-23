@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import dao.exceptions.DaoGenericException;
 import utente.Sesso;
 import utente.Utente;
 
@@ -35,5 +36,6 @@ public class TestUtenteDao {
 
         List<Utente> utenti = dao.get(params);
         assertEquals(1, utenti.size(), "Più di un utente");
+        dao.delete(test);
     }
 }

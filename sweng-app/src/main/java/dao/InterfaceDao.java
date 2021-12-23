@@ -2,6 +2,8 @@ package dao;
 
 import java.util.List;
 
+import dao.exceptions.DaoGenericException;
+
 /**
  * InterfaceDao
  */
