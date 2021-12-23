@@ -46,32 +46,32 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
 
             if (ImpiegatoDao.GET == null) {
                 ImpiegatoDao.GET = connection.prepareStatement(
-                    "SELECT * FROM impiegati WHERE id=? AND password=?"
+                    "SELECT * FROM utenti WHERE id=? AND password=?"
                 );
             }
 
             if (ImpiegatoDao.GET_ALL == null) {
                 ImpiegatoDao.GET_ALL = connection.prepareStatement(
-                    "SELECT * FROM impiegati"
+                    "SELECT * FROM utenti"
                 );
             }
 
             if (ImpiegatoDao.INSERT == null) {
                 ImpiegatoDao.INSERT = connection.prepareStatement(
-                    "INSERT INTO impiegati(nome, cognome, password) VALUES(?, ?, ?);",
+                    "INSERT INTO utenti(nome, cognome, password, tipo) VALUES(?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS
                 );
             }
 
             if (ImpiegatoDao.UPDATE == null) {
                 ImpiegatoDao.UPDATE = connection.prepareStatement(
-                    "SELECT * FROM impiegati WHERE nome=? cognome=?"
+                    "SELECT * FROM utenti WHERE nome=? cognome=?"
                 );
             }
 
             if (ImpiegatoDao.DELETE == null) {
                 ImpiegatoDao.DELETE = connection.prepareStatement(
-                    "DELETE FROM impiegati WHERE id=? AND nome=? AND cognome=? AND password=?"
+                    "DELETE FROM utenti WHERE id=? AND nome=? AND cognome=? AND password=?"
                 );
             }
 
@@ -99,7 +99,8 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
         }
 
         try (ResultSet rs = ImpiegatoDao.GET.executeQuery()) {
-            if (!rs.isBeforeFirst() && rs.next()) {
+            // if (!rs.isBeforeFirst() && rs.next()) {
+            if (rs.next()) {
                 int id          = rs.getInt("id");
                 String nome     = rs.getString("nome");
                 String cognome  = rs.getString("cognome");
@@ -120,6 +121,7 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
             ImpiegatoDao.INSERT.setString(1, impiegato.getNome());
             ImpiegatoDao.INSERT.setString(2, impiegato.getCognome());
             ImpiegatoDao.INSERT.setString(3, impiegato.getPassword());
+            ImpiegatoDao.INSERT.setString(4, "I");
 
             if(ImpiegatoDao.INSERT.execute()) {
                 throw new DaoUnrecoverableException("Il risultato non dovrebbe essere true (ResultSet).");
@@ -160,6 +162,4 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
             throw new DaoUnrecoverableException("Il risultato non dovrebbe essere true (ResultSet).");
         }
     }
-
-    
 }

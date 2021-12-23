@@ -42,8 +42,7 @@ public class Controller {
         int user_id = Integer.parseInt(lblUserID.getText());
         String password = lblPassword.getText();
 
-        // String hash_password = utils.Encryption.sha512(password);
-        String hash_password = password;
+        String hash_password = utils.Encryption.sha512(password);
         UtenteDao utenteDao = new UtenteDao();
         ImpiegatoDao impiegatoDao = new ImpiegatoDao();
         Object[] params = {user_id, hash_password};
@@ -52,8 +51,6 @@ public class Controller {
         Optional<Impiegato> result_impiegato = impiegatoDao.get(params);
 
         AbstractUtente utente = null;
-
-        lblMessaggio.setText("Ciao");
 
         try {
             Thread.sleep(1000);

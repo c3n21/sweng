@@ -27,17 +27,15 @@ public class TestUtenteDao {
             "Comune",
             "Nazione",
             "ASKDJLHAJKSLFHHH",
-            "password"
+            utils.Encryption.sha512("password")
         );
         final UtenteDao dao = new UtenteDao();
         Optional<Utente> utente = dao.save(test);
-        System.out.println(utente.get());
-        Object[] params = {utente.get().getId(), "password"};
+        Object[] params = {utente.get().getId(), utente.get().getPassword()};
 
         utente = dao.get(params);
-        System.out.println(utente.get());
 
         assertTrue(utente.isPresent());
-        dao.delete(utente.get());
+        // dao.delete(utente.get());
     }
 }

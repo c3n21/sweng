@@ -60,7 +60,7 @@ public class UtenteDao implements InterfaceDao<Utente>{
 
             if (UtenteDao.INSERT == null) {
                 UtenteDao.INSERT = connection.prepareStatement(
-                    "INSERT INTO utenti(nome, cognome, data_nascita, sesso, comune, nazione, codice_fiscale, password) VALUES(?, ?, ?, ?, ?, ?, ?, ?);",
+                    "INSERT INTO utenti(nome, cognome, data_nascita, sesso, comune, nazione, codice_fiscale, password, tipo) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);",
                     Statement.RETURN_GENERATED_KEYS
                 );
             }
@@ -77,8 +77,7 @@ public class UtenteDao implements InterfaceDao<Utente>{
                 );
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new DaoUnrecoverableException(e.getMessage(), e.getCause());
         }
 
     }
@@ -103,13 +102,12 @@ public class UtenteDao implements InterfaceDao<Utente>{
         }
 
         try (ResultSet rs = UtenteDao.GET.executeQuery()) {
-            if (!rs.isBeforeFirst() && rs.next()) {
-                
+            // if (!rs.isBeforeFirst() && rs.next()) {
+            if (rs.next()) {
                 int id          = rs.getInt("id");
                 String nome     = rs.getString("nome");
                 String cognome  = rs.getString("cognome");
                 String password = rs.getString("password");
-
                 Sesso sesso = rs.getString("sesso").equals("M")? Sesso.MASCHIO : Sesso.FEMMINA;
 
                 result = Optional.of(
@@ -145,6 +143,7 @@ public class UtenteDao implements InterfaceDao<Utente>{
             UtenteDao.INSERT.setString(6, utente.getNazione());
             UtenteDao.INSERT.setString(7, utente.getCodiceFiscale());
             UtenteDao.INSERT.setString(8, utente.getPassword());
+            UtenteDao.INSERT.setString(9, "U");
             
             if(UtenteDao.INSERT.execute()) {
                 throw new DaoUnrecoverableException("Il risultato non dovrebbe essere true (ResultSet).");

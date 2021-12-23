@@ -48,6 +48,6 @@ public abstract class AbstractUtente {
 
     @Override
     public String toString() {
-	return String.format("Impiegato[id: %d, nome: %s, cognome: %s]", this.getId(), this.getNome(), this.getCognome());
+	return String.format("%s[id: %d, nome: %s, cognome: %s]",this.getClass(), this.getId(), this.getNome(), this.getCognome());
     }
 }
