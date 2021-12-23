@@ -30,12 +30,19 @@ public class TestUtenteDao {
             "ASKDJLHAJKSLFHHH",
             "password"
         );
-        UtenteDao dao = new UtenteDao();
+        final UtenteDao dao = new UtenteDao();
         String[] params = {"Test", "Utente", "password"};
         dao.save(test);
 
         List<Utente> utenti = dao.get(params);
         assertEquals(1, utenti.size(), "Più di un utente");
-        dao.delete(test);
+        utenti.forEach(arg0 -> {
+            try {
+                dao.delete(arg0);
+            } catch (DaoGenericException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        });
     }
 }

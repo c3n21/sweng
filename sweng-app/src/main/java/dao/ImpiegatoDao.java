@@ -26,7 +26,7 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
     private static PreparedStatement UPDATE  = null;
     private static PreparedStatement DELETE = null;
 
-    public ImpiegatoDao() {
+    public ImpiegatoDao() throws DaoUnexpectedException {
         ConfigurationManager configurationManager = null;
 
         try {
@@ -76,8 +76,7 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
             }
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new DaoUnexpectedException(e.getMessage(), e.getCause());
         }
     }
 
@@ -121,7 +120,6 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
                 throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -134,9 +132,7 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
     }
 
     @Override
-    public void delete(Impiegato t) throws DaoGenericException {
-        // TODO Auto-generated method stub
-        
+    public void delete(Impiegato t) throws DaoUnexpectedException {
         try {
 
             // "DELETE FROM utenti WHERE id=? AND nome=? AND cognome=? AND password=?"
@@ -148,6 +144,10 @@ public class ImpiegatoDao implements InterfaceDao<Impiegato> {
             if(ImpiegatoDao.DELETE.execute()) {
                 throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
             }
+
+            System.out.println(
+                String.format("Risultato: %d", ImpiegatoDao.DELETE.getUpdateCount())
+            );
         } catch (SQLException e) {
             throw new DaoUnexpectedException("Il risultato non dovrebbe essere true (ResultSet).");
         }
