@@ -12,11 +12,37 @@
   <url>https://github.com/c3n21/sweng</url>
 
   <properties>
-    <maven.compiler.release>11</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.release>11</maven.compiler.release>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-archetype-fxml</artifactId>
+      <version>0.0.3</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>11</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>11</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.openjfx/javafx -->
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx</artifactId>
+      <version>11</version>
+      <type>pom</type>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2 -->
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -79,8 +105,12 @@
         <version>3.0.2</version>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.0</version>
+        <configuration>
+          <release>11</release>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -113,6 +143,14 @@
       <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <version>3.0.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.3</version>
+        <configuration>
+          <mainClass>com.sweng.app.App</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>

@@ -1,18 +1,33 @@
 package dao;
 
-import java.util.List;
-
-import dao.exceptions.DaoGenericException;
+import java.util.Optional;
 
 /**
- * InterfaceDao
+ * 
  */
 public interface InterfaceDao<T> {
-List<T> get(String[] params) throws DaoGenericException;
 
-void save(T t) throws DaoGenericException;
+/**
+ * Restituisce, se presente, un oggetto T dal database.
+ *
+ * @param params eventuali parametri aggiuntivi
+ */
+Optional<T> get(Object[] params);
 
-void update(T t, String[] params) throws DaoGenericException;
+/**
+ * Inserisce `t` nel database.
+ */
+void save(T t);
 
-void delete(T t) throws DaoGenericException;
+/**
+ * Aggiorna, se presente, un oggetto `t` nel database.
+ *
+ * @param params eventuali parametri aggiuntivi
+ */
+void update(T t, String[] params);
+
+/**
+ * Elimina, se presente, un oggetto `t` nel database.
+ */
+void delete(T t);
 }
